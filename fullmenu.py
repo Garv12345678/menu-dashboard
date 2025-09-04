@@ -426,7 +426,33 @@ elif selected == "Docker Menu":
             st.markdown("### 📘 Gemini's Explanation:")
             st.write(content)
         except Exception as e:
-            st.error(f"❌ Gemini Error: {e}")# ------------------ Machine Learning Section ------------------
+            st.error(f"❌ Gemini Error: {e}")
+# ---------------- Quick Container Logs Viewer ----------------
+st.subheader("📝 Quick Container Logs Viewer")
+container_id = st.text_input("Enter Container ID to view last 10 log lines:", key="logs_container_id")
+if st.button("Show Logs", key="logs_button"):
+    if container_id.strip():
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname=host, username=user, password=password)
+            
+            stdin, stdout, stderr = ssh.exec_command(f"docker logs --tail 10 {container_id}")
+            logs_output = stdout.read().decode()
+            logs_error = stderr.read().decode()
+            
+            if logs_output:
+                st.code(logs_output)
+            if logs_error:
+                st.error(logs_error)
+            
+            ssh.close()
+        except Exception as e:
+            st.error(f"Failed to fetch logs: {e}")
+    else:
+        st.warning("Please enter a valid Container ID.")
+
+# ------------------ Machine Learning Section ------------------
 # ------------------ Machine Learning Section ------------------
 elif selected == "Machine Learning":
     import pandas as pd
