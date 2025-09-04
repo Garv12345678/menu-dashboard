@@ -703,4 +703,4 @@ elif selected == "File Explorer":
         st.info("👆 Enter a valid directory path to begin.")
 
     st.markdown("---")
-    st.caption("🚀 Built with ❤️ by Drishti Baghel")
+    st.caption("🚀 Built by Garv")
